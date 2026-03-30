@@ -1,43 +1,72 @@
 # Skills
 
-A collection of global agent skills that can be installed locally on any machine.
+A collection of personal agent skills for GitHub Copilot and compatible AI coding agents.
 
 ## What are skills?
 
-Skills are reusable instructions for AI coding agents (such as GitHub Copilot). Each skill is a Markdown file (`.md`) that describes a specific capability, workflow, or set of guidelines the agent should follow.
+Agent skills are folders of instructions, scripts, and resources that Copilot can load when relevant to improve its performance on specialized tasks. Copilot decides when to use a skill based on the task prompt and the skill's description.
 
-## Where to add skills
+For more information, see the [GitHub Copilot skills documentation](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/coding-agent/create-skills).
 
-Place each skill as a `.md` file directly in the root of this repository. Use a clear, descriptive file name that reflects the purpose of the skill, for example:
+## Structure of a skill
+
+Each skill lives in its own subdirectory and must contain a `SKILL.md` file. Additional resources (scripts, examples, supplementary Markdown files) can be added alongside it.
 
 ```
 skills/
 ├── README.md
-├── code-review.md
-├── commit-messages.md
-└── testing-guidelines.md
+├── github-actions-failure-debugging/
+│   └── SKILL.md
+├── code-review/
+│   └── SKILL.md
+└── commit-messages/
+    ├── SKILL.md
+    └── examples.md
 ```
+
+Subdirectory names must be **lowercase with hyphens** (e.g. `my-skill`).
 
 ## How to add a skill
 
-1. Create a new Markdown file in the root of this repository.
-2. Give it a descriptive name using lowercase letters and hyphens (e.g. `my-skill.md`).
-3. Write the skill content in plain Markdown. Describe the behavior, rules, or steps the agent should follow.
+1. Create a subdirectory with a lowercase, hyphen-separated name (e.g. `my-skill`).
+2. Inside that directory, create a `SKILL.md` file.
+3. Add YAML frontmatter and a Markdown body to `SKILL.md`.
+4. Optionally, add scripts or other resources to the directory and reference them in the instructions.
 
-### Skill template
+### `SKILL.md` template
 
 ```markdown
-# Skill Name
+---
+name: my-skill
+description: Brief description of what this skill does and when Copilot should use it.
+---
 
-A short description of what this skill does.
-
-## Guidelines
-
-- Guideline one
-- Guideline two
-- Guideline three
+Instructions, guidelines, and examples for Copilot to follow when this skill is active.
 ```
+
+**Frontmatter fields:**
+
+| Field | Required | Description |
+|---|---|---|
+| `name` | Yes | Unique identifier; lowercase with hyphens. Should match the directory name. |
+| `description` | Yes | What the skill does and when Copilot should use it. |
+| `license` | No | License that applies to this skill. |
+
+## Where skills are loaded from
+
+Skills can be stored in two locations:
+
+- **Personal skills** (shared across all projects): `~/.copilot/skills/`, `~/.claude/skills/`, or `~/.agents/skills/`
+- **Project skills** (specific to one repository): `.github/skills/`, `.claude/skills/`, or `.agents/skills/` inside the repo
 
 ## Installation
 
-This repository is designed to be cloned into your global agent skills folder so that the skills are available across all projects on your machine. Refer to your agent's documentation for the exact path where global skills should be placed.
+To use these skills as personal skills, clone this repository into one of the supported personal skills directories:
+
+```bash
+git clone https://github.com/Ferre-Laridon/skills ~/.copilot/skills
+```
+
+## Skills vs. custom instructions
+
+Use **custom instructions** for simple rules that apply to almost every task (e.g. coding standards). Use **skills** for more detailed, task-specific instructions that Copilot should only load when relevant.
