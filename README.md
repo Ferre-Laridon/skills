@@ -64,7 +64,7 @@ Skills can be stored in two locations:
 To use these skills as personal skills, clone this repository into one of the supported personal skills directories:
 
 ```bash
-git clone https://github.com/Ferre-Laridon/skills ~/.copilot/skills
+git clone https://github.com/Ferre-Laridon/skills ~/.agents/skills
 ```
 
 ## Skills vs. custom instructions
