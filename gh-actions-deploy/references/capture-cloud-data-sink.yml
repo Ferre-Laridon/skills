@@ -1,0 +1,58 @@
+name: Build & Push to Harbor
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Image tag (e.g. v1.2.3 or develop)"
+        required: true
+        default: "develop"
+  push:
+    tags:
+      - "v*"
+
+env:
+  REGISTRY: ${{ vars.HARBOR_MGMT_VINTECC_URL }}
+  IMAGE: ${{ vars.HARBOR_MGMT_VINTECC_URL }}/capture-cloud/data-sink
+
+jobs:
+  set-env:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.set-env.outputs.tag }}
+    steps:
+      - name: Resolve image tag
+        id: set-env
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            TAG="${{ github.event.inputs.tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: set-env
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Harbor
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.HARBOR_MGMT_VINTECC_ROBOT_USER }}
+          password: ${{ secrets.HARBOR_MGMT_VINTECC_ROBOT_PWD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ env.IMAGE }}:${{ needs.set-env.outputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
