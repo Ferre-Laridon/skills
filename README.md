@@ -69,13 +69,13 @@ git clone https://github.com/Ferre-Laridon/skills ~/.agents/skills
 
 ## The `.github` scaffold
 
-This repository includes a project-specific `.github/` folder containing a pre-built [AOP (Agent Operating Protocol)](https://github.com/Ferre-Laridon/skills) scaffold — a structured set of skills, agents, and rules that give Copilot deep context about how to work within a project.
+This repository includes a project-specific `.github/` folder containing a pre-built [AOP (Agent Operating Protocol)](https://github.com/Ferre-Laridon/skills) scaffold — a structured set of skills, agents, and rules that give your agent deep context about how to work within a project.
 
-To set up the same scaffold in your own project, tell Copilot:
+To set up the same scaffold in your own project, tell your agent:
 
 > "Scaffold your context using the aop-scaffold skill."
 
-Copilot will use the `aop-scaffold` skill to initialize the `.github/skills/`, `.github/agents/`, and `.github/rules/` directories with the full AOP infrastructure.
+Your agent will use the `aop-scaffold` skill to initialize the `.github/skills/`, `.github/agents/`, and `.github/rules/` directories with the full AOP infrastructure.
 
 ## Skills vs. custom instructions
 
